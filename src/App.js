@@ -1,57 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+// src/App.js
+import React, { Suspense } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { RecoilRoot } from 'recoil';
+import { recoilPersist } from 'recoil-persist'; 
+import ProductGrid from './components/ProductGrid';
+import Cart from './components/Cart';
+import { ToastContainer } from 'react-toastify';  // Import ToastContainer
+import 'react-toastify/dist/ReactToastify.css';  // Import the default styles
+import Home from './pages/Home';
+
+const queryClient = new QueryClient();
+const { persistAtom } = recoilPersist();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<div>Loading products...</div>}>
+          <div className="App">
+            <h1 className="text-center text-3xl font-bold my-4">E-Commerce Store</h1>
+            <Home/>
+          </div>
+        </Suspense>
+      </QueryClientProvider>
+
+      {/* Add ToastContainer to display notifications */}
+      <ToastContainer />
+    </RecoilRoot>
   );
 }
 
